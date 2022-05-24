@@ -1,0 +1,65 @@
+{
+    "variables":{
+        "packer_profile": "cloudbinary-packer",
+        "application_name": "cloudops",
+        "application_version": "1.0.0",
+        "ami_aws_account_id": "266934144328",
+        "region": "us-east-1",
+        "source_ami": "ami-0c4f7023847b90238",
+        "instance_type": "t2.micro"
+    },
+    "builders": [
+    {
+        "name": "{{user `application_name`}}",
+        "type": "amazon-ebs",
+        "instance_type": "{{user `instance_type`}}",
+        "region": "{{user `region`}}",
+        "source_ami": "{{user `source_ami`}}",
+        "ssh_username": "ubuntu",
+        "iam_instance_profile": "SA-EC2-SSM",
+        "ami_name": "{{user `application_name`}}-{{user `application_version`}}",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
+        "associate_public_ip_address": "true",
+        "tags": {
+            "Name": "{{user `application_name`}}",
+            "CreatedBy": "Packer"
+        }
+    }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get update",
+                "sudo apt-get install git curl unzip tree -y"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get update",
+                "sudo apt-get install ansible -y"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo touch /tmp/devops.txt"
+            ]
+        },
+        {
+            "type": "shell-local",
+            "inline": [
+                "./hashicorp-packer/web.sh"
+            ]
+        },
+        {
+            "type": "ansible-local",
+            "playbook_file": "./hashicorp-packer/timezone.yml",
+            "extra_arguments": [
+                "-vvvv"
+            ]
+        }
+    ]
+}

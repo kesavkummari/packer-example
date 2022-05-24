@@ -1,64 +1,39 @@
 {
-    "variables":{
+    "variables": {
+        "aws_region": "us-east-1",
         "packer_profile": "cloudbinary-packer",
-        "application_name": "cloudops",
-        "application_version": "1.0.0",
-        "ami_aws_account_id": "266934144328",
-        "region": "us-east-1",
-        "source_ami": "ami-0c4f7023847b90238",
-        "instance_type": "t2.micro"
+        "aws_ami_name": "amazon-linux_{{isotime \"02Jan2006\"}}"
     },
-    "builders": [
-    {
-        "name": "{{user `application_name`}}",
+
+    "builders": [{
         "type": "amazon-ebs",
-        "instance_type": "{{user `instance_type`}}",
-        "region": "{{user `region`}}",
-        "source_ami": "{{user `source_ami`}}",
-        "ssh_username": "ubuntu",
-        "iam_instance_profile": "SA-EC2-SSM",
-        "ami_name": "{{user `application_name`}}-{{user `application_version`}}",
-        "force_deregister": "true",
-        "force_delete_snapshot": "true",
+        "region": "{{user `aws_region`}}",
+        "instance_type": "t2.micro",
+        "ssh_username": "ec2-user",
+        "ami_name": "{{user `aws_ami_name`}}",
+        "ami_description": "Customized Amazon Linux",
         "associate_public_ip_address": "true",
-        "tags": {
-            "Name": "{{user `application_name`}}",
-            "CreatedBy": "Packer"
+        "source_ami_filter": {
+            "filters": {
+                "virtualization-type": "hvm",
+                "name": "amzn-ami*-ebs",
+                "root-device-type": "ebs"
+            },
+            "owners": ["266934144328"],
+            "most_recent": true
         }
-    }
-    ],
+    }],
+
     "provisioners": [
         {
             "type": "shell",
             "inline": [
-                "sudo apt-get update",
-                "sudo apt-get install git curl unzip tree -y"
-            ]
-        },
-        {
-            "type": "shell",
-            "inline": [
-                "sudo apt-get update",
-                "sudo apt-get install ansible -y"
-            ]
-        },
-        {
-            "type": "shell",
-            "inline": [
-                "sudo touch /tmp/devops.txt"
-            ]
-        },
-        {
-            "type": "shell-local",
-            "inline": [
-                "./hashicorp-packer/web.sh"
-            ]
-        },
-        {
-            "type": "ansible-local",
-            "playbook_file": "./hashicorp-packer/timezone.yml",
-            "extra_arguments": [
-                "-vvvv"
+                "sudo yum update -y",
+				"sudo /usr/sbin/update-motd --disable",
+                "echo 'No unauthorized access permitted' | sudo tee /etc/motd",
+                "sudo rm /etc/issue",
+                "sudo ln -s /etc/motd /etc/issue",
+                "sudo yum install -y elinks screen"
             ]
         }
     ]
