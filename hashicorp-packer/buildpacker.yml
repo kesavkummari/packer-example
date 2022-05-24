@@ -14,7 +14,10 @@ phases:
       - mv jq /usr/local/bin 
       - pwd
       - ls -lrt
-      - cd $CODEBUILD_SRC_DIR/hashicorp-packer/
+      #- cd $CODEBUILD_SRC_DIR/hashicorp-packer/
+      - cd hashicorp-packer
+      - pwd
+      - ls -lrta
       - packer validate packer.json
   build:
     commands:
