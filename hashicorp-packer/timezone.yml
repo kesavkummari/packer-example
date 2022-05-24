@@ -1,0 +1,12 @@
+---
+- name: Play-1 [Setup Time Zone on Node-1]
+  hosts: web
+  become: yes 
+  tasks:
+    - name: Update APT Repository
+      apt: update_cache=yes
+      ignore_errors: yes
+
+    - name: Setup TimeZone i.e. Asia/Kolkata
+      command: timedatectl set-timezone Asia/Kolkata
+...
