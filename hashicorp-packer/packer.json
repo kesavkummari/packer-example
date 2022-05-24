@@ -1,5 +1,6 @@
 {
     "variables":{
+        "packer_profile": "cloudbinary-packer",
         "application_name": "cloudops",
         "application_version": "1.0.0",
         "ami_aws_account_id": "266934144328",
@@ -11,7 +12,6 @@
     {
         "name": "{{user `application_name`}}",
         "type": "amazon-ebs",
-        "profile": "default",
         "instance_type": "{{user `instance_type`}}",
         "region": "{{user `region`}}",
         "source_ami": "{{user `source_ami`}}",
