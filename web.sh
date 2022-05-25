@@ -31,6 +31,10 @@ echo "<body>" >> /var/www/html/index.html
 echo "</body>" >> /var/www/html/index.html 
 echo "</html>" >> /var/www/html/index.html 
 
+# Enable the Service/Daemons at Boot Level and Start 
+sudo systemctl enbale apache2
+sudo systemctl restart apache2
+
 # To Restart SSM Agent on Ubuntu 
 sudo systemctl restart snap.amazon-ssm-agent.amazon-ssm-agent.service
 
