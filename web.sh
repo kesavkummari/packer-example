@@ -25,7 +25,7 @@ sudo rm -rf /var/www/html/index.html
 cd /opt/
 git clone https://github.com/keshavkummari/keshavkummari.git
 cd keshavkummari
-mv * /var/www/html/
+cp -pvr /opt/keshavkummari/ /var/www/html/
 
 
 # Enable the Service/Daemons at Boot Level and Start 
