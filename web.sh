@@ -22,14 +22,11 @@ sudo systemctl restart apache2
 sudo rm -rf /var/www/html/index.html 
 
 # Update the Content 
-echo "<html>" >> /var/www/html/index.html 
-echo "<head>" >> /var/www/html/index.html 
-  echo "<title> Welcome To AWS DevOps World </title>" >> /var/www/html/index.html 
-echo "</head>" >> /var/www/html/index.html 
-echo "<body>" >> /var/www/html/index.html 
-  echo "<p> Learn By Doing! </p>" >> /var/www/html/index.html 
-echo "</body>" >> /var/www/html/index.html 
-echo "</html>" >> /var/www/html/index.html 
+cd /opt/
+git clone https://github.com/keshavkummari/keshavkummari.git
+cd keshavkummari
+mv * /var/www/html/
+
 
 # Enable the Service/Daemons at Boot Level and Start 
 sudo systemctl enbale apache2
