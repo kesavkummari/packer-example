@@ -1,39 +1,57 @@
 {
-    "variables": {
-        "aws_region": "us-east-1",
+    "variables":{
         "packer_profile": "cloudbinary-packer",
-        "aws_ami_name": "amazon-linux_{{isotime \"02Jan2006\"}}"
+        "application_name": "cloudops",
+        "application_version": "1.0.0",
+        "ami_aws_account_id": "266934144328",
+        "region": "us-east-1",
+        "source_ami": "ami-0c4f7023847b90238",
+        "instance_type": "t2.micro"
     },
-
-    "builders": [{
+    "builders": [
+    {
+        "name": "{{user `application_name`}}",
         "type": "amazon-ebs",
-        "region": "{{user `aws_region`}}",
-        "instance_type": "t2.micro",
-        "ssh_username": "ec2-user",
-        "ami_name": "{{user `aws_ami_name`}}",
-        "ami_description": "Customized Amazon Linux",
+        "ssh_username": "ubuntu",
+        "force_deregister": "true",
+        "force_delete_snapshot": "true",
         "associate_public_ip_address": "true",
-        "source_ami_filter": {
-            "filters": {
-                "virtualization-type": "hvm",
-                "name": "amzn-ami*-ebs",
-                "root-device-type": "ebs"
-            },
-            "owners": ["266934144328"],
-            "most_recent": true
+        "region": "{{user `region`}}",
+        "source_ami": "{{user `source_ami`}}",
+        "instance_type": "{{user `instance_type`}}",
+        "ami_name": "{{user `application_name`}}-{{user `application_version`}}",
+        "iam_instance_profile": "{{user `packer_profile`}}",
+        "tags": {
+            "Name": "{{user `application_name`}}",
+            "CreatedBy": "Packer"
         }
-    }],
-
+    }
+    ],
     "provisioners": [
         {
             "type": "shell",
             "inline": [
-                "sudo yum update -y",
-				"sudo /usr/sbin/update-motd --disable",
-                "echo 'No unauthorized access permitted' | sudo tee /etc/motd",
-                "sudo rm /etc/issue",
-                "sudo ln -s /etc/motd /etc/issue",
-                "sudo yum install -y elinks screen"
+                "sudo apt-get update",
+                "sudo apt-get install git curl unzip tree -y"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get update",
+                "sudo apt-get install ansible -y"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "sudo apt-get install apache2 -y"
+            ]
+        },
+        {
+            "type": "shell-local",
+            "inline": [
+                "touch /opt/demo.txt"
             ]
         }
     ]
