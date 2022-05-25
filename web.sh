@@ -18,16 +18,6 @@ sudo systemctl restart apache2
 
 # DocumentRoot : /var/www/html/  File : index.html 
 
-# Delete the Default File From DocumentRoot 
-sudo rm -rf /var/www/html/index.html 
-
-# Update the Content 
-cd /opt/
-git clone https://github.com/keshavkummari/keshavkummari.git
-cd keshavkummari
-cp -pvr /opt/keshavkummari/ /var/www/html/
-
-
 # Enable the Service/Daemons at Boot Level and Start 
 sudo systemctl enbale apache2
 sudo systemctl restart apache2
