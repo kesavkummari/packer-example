@@ -5,7 +5,7 @@
         "application_version": "1.0.0",
         "ami_aws_account_id": "266934144328",
         "region": "ap-south-1",
-        "source_ami": "ami-0c4f7023847b90238",
+        "source_ami": "ami-05ba3a39a75be1ec4",
         "instance_type": "t2.micro"
     },
     "builders": [
