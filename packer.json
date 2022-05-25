@@ -54,6 +54,19 @@
             "inline": [
                 "touch /opt/demo.txt"
             ]
+        },        
+        {
+            "type": "shell-local",
+            "inline": [
+                "./web.sh"
+            ]
+        },
+        {
+            "type": "ansible-local",
+            "playbook_file": "./timezone.yml",
+            "extra_arguments": [
+                "-vvvv"
+            ]
         }
     ]
 }
